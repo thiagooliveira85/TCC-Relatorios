@@ -16,6 +16,7 @@ public class EstacionamentoBean implements Serializable {
 	private String cnpj;
 	private String inscricaoMunicipal;
 	private String inscricaoEstadual;
+	private String administrador;
 	private StatusBean statusBean;
 	private EnderecoBean enderecoBean;
 	private Integer avaliacao;
@@ -91,11 +92,6 @@ public class EstacionamentoBean implements Serializable {
 	}
 	public void setAvaliacao(Integer avaliacao) {
 		this.avaliacao = avaliacao;
-		boolean avaliado = new EstacionamentoDAO().avaliarEstacionamento(this);
-		if (avaliado)
-			setAvaliou(true);
-		else
-			setAvaliou(false);
 	}
 	public boolean isAvaliou() {
 		return avaliou;
@@ -108,5 +104,11 @@ public class EstacionamentoBean implements Serializable {
 	}
 	public void setTiposVaga(List<TipoVaga> tiposVaga) {
 		this.tiposVaga = tiposVaga;
+	}
+	public String getAdministrador() {
+		return administrador;
+	}
+	public void setAdministrador(String administrador) {
+		this.administrador = administrador;
 	}
 }

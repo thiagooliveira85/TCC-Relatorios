@@ -18,7 +18,7 @@ public class RelatorioDAO extends DB {
 	
 	
 
-	public List<RelatorioAluguel> listaRelatorio() {
+	public List<RelatorioAluguel> listaRelatorioAluguel() {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;

@@ -6,6 +6,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta charset="UTF-8"/>
+	<title>Relatórios</title>
 </h:head>
 <h:body>
 
@@ -22,14 +23,14 @@
 				<p:menuitem value="Por clientes" url="/porCliente.jsf" icon="ui-icon-arrow-1-e"/>
 			</p:submenu>
 			<p:submenu label="Ranking" icon="ui-icon-document">
-				<p:menuitem value="Meus estacionamentos" url="#" icon="ui-icon-arrow-1-e"/>
-				<p:menuitem value="Todos" url="#" icon="ui-icon-arrow-1-e"/>
+				<p:menuitem value="Meus estacionamentos" url="/estacionamentoAdmin.jsf" icon="ui-icon-arrow-1-e"/>
+				<p:menuitem value="Todos" url="/estacionamentos.jsf	" icon="ui-icon-arrow-1-e"/>
 			</p:submenu>
 			<f:facet name="options">
 				<p:commandButton type="button" value="Logout" icon="ui-icon-extlink" />
 			</f:facet>
 		</p:menubar>
-	
+		
 	<div id="conteudo">
 		<ui:insert name="corpo" />
 	</div>
