@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head />
+
+<h:body>
+	<h:form>
+		<div align="center">
+			<p:graphicImage name="img/logotipo.png" style="width:7%; height:7%; margin-top:0; margin-bottom:0; " />
+		</div>
+		<p:menubar style="margin-bottom:1%;">
+			<p:submenu label="Aluguel" icon="ui-icon-document">
+				<p:menuitem value="Por período" url="/porPeriodo.jsf" icon="ui-icon-arrow-1-e"/>
+				<p:menuitem value="Por tipo da vaga" url="/porTipo.jsf" icon="ui-icon-arrow-1-e"/>
+				<p:menuitem value="Por clientes" url="/porCliente.jsf" icon="ui-icon-arrow-1-e"/>
+			</p:submenu>
+			<p:submenu label="Ranking" icon="ui-icon-document">
+				<p:submenu label="Meus estacionamentos">
+					<p:menuitem value="Project" url="#" />
+					<p:menuitem value="Other" url="#" />
+				</p:submenu>
+				<p:menuitem value="Demais estacionamentos" url="#" />
+			</p:submenu>
+			<f:facet name="options">
+				<p:commandButton type="button" value="Logout" icon="ui-icon-extlink" />
+			</f:facet>
+		</p:menubar>
+		
+		<p:growl id="messages" showDetail="false" />
+		<h:panelGrid columns="4">
+			<p:outputLabel for="porCliente" value="Placa:" />
+			<p:inputText id="porCliente" maxlength="7" style="width:100px;" required="true"/>
+			
+			<p:commandButton icon="ui-icon-search" title="Gerar relatório" action="${dataExporterView.buscarInformacoes}" value="Buscar" update="tbl,messages" />
+		</h:panelGrid>
+		
+		<div align="right">
+			<h:commandLink>
+				<p:graphicImage name="img/logo_excel.png" width="40" title="Exportar em excel" />
+				<p:dataExporter type="xls" target="tbl" fileName="relatorios" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage name="img/logo_pdf.png" width="40" title="Exportar em PDF" />
+				<p:dataExporter type="pdf" target="tbl" fileName="relatorios" preProcessor="#{dataExporterView.preProcessPDF}" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage name="img/logo_csv.png" width="40" title="Exportar em CSV" />
+				<p:dataExporter type="csv" target="tbl" fileName="relatorios" />
+			</h:commandLink>
+		</div>
+
+		<p:dataTable id="tbl" var="aluguel" 
+			value="#{dataExporterView.relatorios}" paginatorTemplate=" {FirstPageLink} {PageLinks} {LastPageLink}" 
+			paginator="true" rows="10" paginatorPosition="bottom" emptyMessage="Nenhum aluguel cadastrado." style="margin-bottom:20px; margin-top:1%;">
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Tipo da Vaga" />
+				</f:facet>
+				<h:outputText value="#{aluguel.tipoVaga}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Modelo" />
+				</f:facet>
+				<h:outputText value="#{aluguel.modelo}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Placa" />
+				</f:facet>
+				<h:outputText value="#{aluguel.placa}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Vaga" />
+				</f:facet>
+				<h:outputText value="#{aluguel.codigoVaga}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Hora de entrada" />
+				</f:facet>
+				<h:outputText value="#{aluguel.horaEntrada}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Hora de saída" />
+				</f:facet>
+				<h:outputText value="#{aluguel.horaSaida}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Valor" />
+				</f:facet>
+				<h:outputText value="#{aluguel.precoFormatado}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Tipo de pagamento" />
+				</f:facet>
+				<h:outputText value="#{aluguel.tipoPagamento}" />
+			</p:column>
+		</p:dataTable>
+		<!-- <p:panelGrid>
+			<p:chart type="line" model="#{dataExporterView.dateModel}" style="height:400px;"/>
+		</p:panelGrid> -->
+		<!-- <h:panelGrid>
+			<p:chart type="pie" model="#{dataExporterView.pieModel1}" style="width:400px;height:300px" />
+		</h:panelGrid>
+		
+		<p:panelGrid>
+			<p:chart type="bar" model="#{dataExporterView.barModel}" style="height:300px"/>
+		</p:panelGrid> -->
+	</h:form>
+</h:body>
+</html>
