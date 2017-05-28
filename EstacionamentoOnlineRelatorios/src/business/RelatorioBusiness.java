@@ -3,8 +3,8 @@ package business;
 import java.util.Date;
 import java.util.List;
 
+import bean.RelatorioAluguel;
 import dao.RelatorioDAO;
-import manager.RelatorioAluguel;
 
 public class RelatorioBusiness {
 	

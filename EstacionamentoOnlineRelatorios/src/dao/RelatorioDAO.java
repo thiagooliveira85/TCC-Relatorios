@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import bean.RelatorioAluguel;
 import bean.RelatorioPorTipo;
 import bean.Tipo;
-import manager.RelatorioAluguel;
 import db.DB;
 
 public class RelatorioDAO extends DB {

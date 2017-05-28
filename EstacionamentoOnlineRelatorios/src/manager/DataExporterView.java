@@ -18,6 +18,7 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.PieChartModel;
 
 import bean.EstacionamentoBean;
+import bean.RelatorioAluguel;
 import business.RelatorioBusiness;
 
 import com.lowagie.text.BadElementException;
