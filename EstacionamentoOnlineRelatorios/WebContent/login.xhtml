@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<style>
+		 img.transparent {
+		     filter:alpha(opacity=10);
+		     opacity:.10;
+		 }
+	</style>
+</h:head>
+
+<h:body style="background-color: rgb(250,250,250)">
+	<h:form>
+		<p:growl id="msg" showDetail="false" />
+		<div align="center">
+			<p:graphicImage name="img/logotipo.png" style="width:10%; height:10%; margin-top:0; margin-bottom:0; " />
+			<h:panelGrid columns="2">
+				<p:outputLabel for="login" value="Login:" />
+				<p:inputText id="login" value="#{autenticacao.login}" title="Informe o login" required="true" />
+				<p:outputLabel for="senha" value="Senha:" />
+				<p:password id="senha" value="#{autenticacao.senha}" title="Informe a senha" required="true" />
+				<br />
+				<p:commandButton action="#{autenticacao.autentica}" value="Acesso" style="width:100%;" update="msg"/>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>

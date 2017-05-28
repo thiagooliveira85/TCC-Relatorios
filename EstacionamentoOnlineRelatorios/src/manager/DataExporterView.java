@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -50,6 +51,7 @@ public class DataExporterView implements Serializable {
 	private Date dateFim;
 	
 	private String tipoInformado;
+	private String placa;
 	
 	private List<EstacionamentoBean> estacionamentosAdmin;
 	private List<EstacionamentoBean> estacionamentos;
@@ -78,6 +80,17 @@ public class DataExporterView implements Serializable {
     		return;
     	
     	relatorios = RelatorioBusiness.getInstance().buscarInformacoesPor(dateIni, dateFim, tipoInformado);
+    }
+    
+    public void buscarInformacoesPorPlaca(){
+    	
+    	if ( placa == null){
+    		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Favor, informar a placa do automóvel!", "Favor, informar a placa do automóvel!");		
+    		FacesContext.getCurrentInstance().addMessage(null, message);
+    		return;
+    	}
+    	
+    	relatorios = new RelatorioDAO().buscarInformacoesPorPlaca(placa);
     }
     
     public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
@@ -159,6 +172,14 @@ public class DataExporterView implements Serializable {
 	
 	public void setDateModel(LineChartModel dateModel) {
 		this.dateModel = dateModel;
+	}
+
+	public String getPlaca() {
+		return placa;
+	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
 	}
 	
 	/*private void createPieModel1() {

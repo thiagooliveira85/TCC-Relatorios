@@ -5,32 +5,41 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<meta charset="UTF-8"/>
+	<meta charset="UTF-8" />
 	<title>Relatórios</title>
 </h:head>
 <h:body>
 
 	<header>
 		<div align="center">
-			<p:graphicImage name="img/logotipo.png" style="width:7%; height:7%; margin-top:0; margin-bottom:0; " />
+			<p:graphicImage name="img/logotipo.png"
+				style="width:7%; height:7%; margin-top:0; margin-bottom:0; " />
 		</div>
 	</header>
-	
-	<p:menubar style="margin-bottom:1%;">
+
+	<h:form>
+		<p:menubar style="margin-bottom:1%;">
 			<p:submenu label="Aluguel" icon="ui-icon-document">
-				<p:menuitem value="Por período" url="/porPeriodo.jsf" icon="ui-icon-arrow-1-e"/>
-				<p:menuitem value="Por tipo da vaga" url="/porTipo.jsf" icon="ui-icon-arrow-1-e"/>
-				<p:menuitem value="Por clientes" url="/porCliente.jsf" icon="ui-icon-arrow-1-e"/>
+				<p:menuitem value="Por período" url="/porPeriodo.jsf"
+					icon="ui-icon-arrow-1-e" />
+				<p:menuitem value="Por tipo da vaga" url="/porTipo.jsf"
+					icon="ui-icon-arrow-1-e" />
+				<p:menuitem value="Por clientes" url="/porCliente.jsf"
+					icon="ui-icon-arrow-1-e" />
 			</p:submenu>
 			<p:submenu label="Ranking" icon="ui-icon-document">
-				<p:menuitem value="Meus estacionamentos" url="/estacionamentoAdmin.jsf" icon="ui-icon-arrow-1-e"/>
-				<p:menuitem value="Todos" url="/estacionamentos.jsf	" icon="ui-icon-arrow-1-e"/>
+				<p:menuitem value="Meus estacionamentos"
+					url="/estacionamentoAdmin.jsf" icon="ui-icon-arrow-1-e" />
+				<p:menuitem value="Todos" url="/estacionamentos.jsf	"
+					icon="ui-icon-arrow-1-e" />
 			</p:submenu>
 			<f:facet name="options">
-				<p:commandButton type="button" value="Logout" icon="ui-icon-extlink" />
+				<p:commandButton value="Sair" icon="ui-icon-extlink"
+					action="#{autenticacao.logout}" ajax="false"/>
 			</f:facet>
 		</p:menubar>
-		
+	</h:form>
+
 	<div id="conteudo">
 		<ui:insert name="corpo" />
 	</div>

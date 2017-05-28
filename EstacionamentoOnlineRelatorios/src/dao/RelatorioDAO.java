@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,9 +14,6 @@ import bean.Tipo;
 import db.DB;
 
 public class RelatorioDAO extends DB {
-	
-	
-	
 	
 
 	public List<RelatorioAluguel> listaRelatorioAluguel() {
@@ -33,16 +31,7 @@ public class RelatorioDAO extends DB {
 			relatorios = new ArrayList<RelatorioAluguel>();
 
 			while (rs.next()) {
-				RelatorioAluguel r = new RelatorioAluguel();
-				r.setCodigoVaga(rs.getString("codigo_vaga"));
-				r.setHoraEntrada(rs.getDate("hora_entrada"));
-				r.setHoraSaida(rs.getDate("hora_saida"));
-				r.setModelo(rs.getString("modelo"));
-				r.setPlaca(rs.getString("placa"));
-				r.setTipoPagamento(rs.getString("tipo_pagamento"));
-				r.setTipoVaga(rs.getString("tipo_vaga"));
-				r.setValorCobrado(rs.getDouble("valor_cobrado"));
-				relatorios.add(r);
+				montaObjRelatorioAluguel(rs, relatorios);
 			}
 
 		} catch (Exception e) {
@@ -109,9 +98,6 @@ public class RelatorioDAO extends DB {
 				dataIni = rs.getDate("minima");
 				dataFim = rs.getDate("maxima");
 			}
-			
-			
-			
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,16 +123,7 @@ public class RelatorioDAO extends DB {
 			lista = new ArrayList<RelatorioAluguel>();
 
 			while (rs.next()){
-				RelatorioAluguel r = new RelatorioAluguel();
-				r.setCodigoVaga(rs.getString("codigo_vaga"));
-				r.setHoraEntrada(rs.getDate("hora_entrada"));
-				r.setHoraSaida(rs.getDate("hora_saida"));
-				r.setModelo(rs.getString("modelo"));
-				r.setPlaca(rs.getString("placa"));
-				r.setTipoPagamento(rs.getString("tipo_pagamento"));
-				r.setTipoVaga(rs.getString("tipo_vaga"));
-				r.setValorCobrado(rs.getDouble("valor_cobrado"));
-				lista.add(r);
+				montaObjRelatorioAluguel(rs, lista);
 			}
 
 		} catch (Exception e) {
@@ -175,16 +152,7 @@ public class RelatorioDAO extends DB {
 			lista = new ArrayList<RelatorioAluguel>();
 
 			while (rs.next()){
-				RelatorioAluguel r = new RelatorioAluguel();
-				r.setCodigoVaga(rs.getString("codigo_vaga"));
-				r.setHoraEntrada(rs.getDate("hora_entrada"));
-				r.setHoraSaida(rs.getDate("hora_saida"));
-				r.setModelo(rs.getString("modelo"));
-				r.setPlaca(rs.getString("placa"));
-				r.setTipoPagamento(rs.getString("tipo_pagamento"));
-				r.setTipoVaga(rs.getString("tipo_vaga"));
-				r.setValorCobrado(rs.getDouble("valor_cobrado"));
-				lista.add(r);
+				montaObjRelatorioAluguel(rs, lista);
 			}
 
 		} catch (Exception e) {
@@ -212,16 +180,7 @@ public class RelatorioDAO extends DB {
 			lista = new ArrayList<RelatorioAluguel>();
 
 			while (rs.next()){
-				RelatorioAluguel r = new RelatorioAluguel();
-				r.setCodigoVaga(rs.getString("codigo_vaga"));
-				r.setHoraEntrada(rs.getDate("hora_entrada"));
-				r.setHoraSaida(rs.getDate("hora_saida"));
-				r.setModelo(rs.getString("modelo"));
-				r.setPlaca(rs.getString("placa"));
-				r.setTipoPagamento(rs.getString("tipo_pagamento"));
-				r.setTipoVaga(rs.getString("tipo_vaga"));
-				r.setValorCobrado(rs.getDouble("valor_cobrado"));
-				lista.add(r);
+				montaObjRelatorioAluguel(rs, lista);
 			}
 
 		} catch (Exception e) {
@@ -230,6 +189,46 @@ public class RelatorioDAO extends DB {
 			close(conn, pstmt, rs);
 		}
 		return lista;
+	}
+
+	public List<RelatorioAluguel> buscarInformacoesPorPlaca(String placa) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<RelatorioAluguel> relatorios = null;
+
+		try {
+
+			conn = getMyqslConnection();
+			pstmt = conn.prepareStatement("select * from historico_aluguel where upper(placa) like '%" + placa.toUpperCase() + "%'");
+			rs = pstmt.executeQuery();
+			relatorios = new ArrayList<RelatorioAluguel>();
+
+			while (rs.next()) {
+				montaObjRelatorioAluguel(rs, relatorios);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		return relatorios;
+	}
+
+	private void montaObjRelatorioAluguel(ResultSet rs, List<RelatorioAluguel> relatorios)
+			throws SQLException {
+		RelatorioAluguel r = new RelatorioAluguel();
+		r.setCodigoVaga(rs.getString("codigo_vaga"));
+		r.setHoraEntrada(rs.getDate("hora_entrada"));
+		r.setHoraSaida(rs.getDate("hora_saida"));
+		r.setModelo(rs.getString("modelo"));
+		r.setPlaca(rs.getString("placa"));
+		r.setTipoPagamento(rs.getString("tipo_pagamento"));
+		r.setTipoVaga(rs.getString("tipo_vaga"));
+		r.setValorCobrado(rs.getDouble("valor_cobrado"));
+		relatorios.add(r);
 	}
 
 }

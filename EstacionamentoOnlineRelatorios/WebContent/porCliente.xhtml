@@ -12,9 +12,9 @@
 		<p:growl id="messages" showDetail="false" />
 		<h:panelGrid columns="4">
 			<p:outputLabel for="porCliente" value="Placa:" />
-			<p:inputText id="porCliente" maxlength="7" style="width:100px;" required="true"/>
+			<p:inputText id="porCliente" maxlength="7" style="width:100px;" required="true" value="${dataExporterView.placa}"/>
 			
-			<p:commandButton icon="ui-icon-search" title="Gerar relatório" action="${dataExporterView.buscarInformacoes}" value="Buscar" update="tbl,messages" />
+			<p:commandButton icon="ui-icon-search" title="Gerar relatório" action="${dataExporterView.buscarInformacoesPorPlaca}" value="Buscar" update="tbl,messages" />
 		</h:panelGrid>
 		
 		<div align="right">
@@ -34,7 +34,7 @@
 			</h:commandLink>
 		</div>
 
-		<p:dataTable id="tbl" var="aluguel" 
+		<p:dataTable id="tbl" var="aluguel"
 			value="#{dataExporterView.relatorios}" paginatorTemplate=" {FirstPageLink} {PageLinks} {LastPageLink}" 
 			paginator="true" rows="10" paginatorPosition="bottom" emptyMessage="Nenhum aluguel cadastrado." style="margin-bottom:20px; margin-top:1%;">
 
@@ -93,6 +93,7 @@
 				</f:facet>
 				<h:outputText value="#{aluguel.tipoPagamento}" />
 			</p:column>
+		</p:dataTable>	
 	</h:form>
 	</ui:define>
 </ui:composition>
