@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8"/>
+</h:head>
+<h:body>
+
+	<header>
+		<div align="center">
+			<p:graphicImage name="img/logotipo.png" style="width:7%; height:7%; margin-top:0; margin-bottom:0; " />
+		</div>
+	</header>
+	
+	<p:menubar style="margin-bottom:1%;">
+			<p:submenu label="Aluguel" icon="ui-icon-document">
+				<p:menuitem value="Por período" url="/porPeriodo.jsf" icon="ui-icon-arrow-1-e"/>
+				<p:menuitem value="Por tipo da vaga" url="/porTipo.jsf" icon="ui-icon-arrow-1-e"/>
+				<p:menuitem value="Por clientes" url="/porCliente.jsf" icon="ui-icon-arrow-1-e"/>
+			</p:submenu>
+			<p:submenu label="Ranking" icon="ui-icon-document">
+				<p:menuitem value="Meus estacionamentos" url="#" icon="ui-icon-arrow-1-e"/>
+				<p:menuitem value="Todos" url="#" icon="ui-icon-arrow-1-e"/>
+			</p:submenu>
+			<f:facet name="options">
+				<p:commandButton type="button" value="Logout" icon="ui-icon-extlink" />
+			</f:facet>
+		</p:menubar>
+	
+	<div id="conteudo">
+		<ui:insert name="corpo" />
+	</div>
+
+	<!-- <footer>
+		<p>Relatórios Estacionamento OnLine</p>
+		<p><small>Desenvolvido por Thiago Oliveira</small></p>
+	</footer> -->
+
+</h:body>
+</html>
