@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class BairroBean implements Serializable {
 
+	////////
 	private static final long serialVersionUID = 8119562044864506242L;
 
 	private int id;
