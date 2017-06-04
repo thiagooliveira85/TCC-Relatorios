@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,7 +69,7 @@ public class RelatorioDAO extends DB {
 		return relatorios;
 	}
 	
-	public List<RelatorioPorTipo> listaRelatorioPorTempo() {
+	/*public List<RelatorioPorTipo> listaRelatorioPorTempo() {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -105,7 +107,7 @@ public class RelatorioDAO extends DB {
 			close(conn, pstmt, rs);
 		}
 		return relatorios;
-	}
+	}*/
 
 	public List<RelatorioAluguel> buscarInformacoesPorTipo(String tipoInformado) {
 
@@ -219,16 +221,34 @@ public class RelatorioDAO extends DB {
 
 	private void montaObjRelatorioAluguel(ResultSet rs, List<RelatorioAluguel> relatorios)
 			throws SQLException {
+		
 		RelatorioAluguel r = new RelatorioAluguel();
 		r.setCodigoVaga(rs.getString("codigo_vaga"));
-		r.setHoraEntrada(rs.getDate("hora_entrada"));
-		r.setHoraSaida(rs.getDate("hora_saida"));
+		
+		validaDataHora(rs, r);
+		
 		r.setModelo(rs.getString("modelo"));
 		r.setPlaca(rs.getString("placa"));
 		r.setTipoPagamento(rs.getString("tipo_pagamento"));
 		r.setTipoVaga(rs.getString("tipo_vaga"));
 		r.setValorCobrado(rs.getDouble("valor_cobrado"));
 		relatorios.add(r);
+		
+	}
+
+	private void validaDataHora(ResultSet rs, RelatorioAluguel r) throws SQLException {
+		
+		Timestamp timestampEntrada = rs.getTimestamp("hora_entrada");
+		if (timestampEntrada != null){
+			LocalDateTime dataEntrada = timestampEntrada.toLocalDateTime();
+			r.setHoraEntrada(dataEntrada != null ? dataEntrada : null);
+		}
+		
+		Timestamp timestampSaida = rs.getTimestamp("hora_saida");
+		if (timestampSaida != null){
+			LocalDateTime dataSaida = timestampSaida.toLocalDateTime();
+			r.setHoraSaida(dataSaida != null ? dataSaida : null);
+		}
 	}
 
 }

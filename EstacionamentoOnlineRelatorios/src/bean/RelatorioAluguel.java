@@ -1,7 +1,8 @@
 package bean;
 
 import java.text.NumberFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class RelatorioAluguel {
 	
@@ -9,11 +10,13 @@ public class RelatorioAluguel {
 	private String modelo;
 	private String placa;
 	private String codigoVaga;
-	private Date horaEntrada;
-	private Date horaSaida;
+	private LocalDateTime horaEntrada;
+	private LocalDateTime horaSaida;
 	private double valorCobrado;
 	private String tipoPagamento;
 	private String precoFormatado;
+	private String dtEntradaFormatada;
+	private String dtSaidaFormatada;
 	
 	public String getTipoVaga() {
 		return tipoVaga;
@@ -38,18 +41,6 @@ public class RelatorioAluguel {
 	}
 	public void setCodigoVaga(String codigoVaga) {
 		this.codigoVaga = codigoVaga;
-	}
-	public Date getHoraEntrada() {
-		return horaEntrada;
-	}
-	public void setHoraEntrada(Date horaEntrada) {
-		this.horaEntrada = horaEntrada;
-	}
-	public Date getHoraSaida() {
-		return horaSaida;
-	}
-	public void setHoraSaida(Date horaSaida) {
-		this.horaSaida = horaSaida;
 	}
 	public double getValorCobrado() {
 		return valorCobrado;
@@ -77,9 +68,9 @@ public class RelatorioAluguel {
 		result = prime * result
 				+ ((codigoVaga == null) ? 0 : codigoVaga.hashCode());
 		result = prime * result
-				+ ((horaEntrada == null) ? 0 : horaEntrada.hashCode());
+				+ ((getHoraEntrada() == null) ? 0 : getHoraEntrada().hashCode());
 		result = prime * result
-				+ ((horaSaida == null) ? 0 : horaSaida.hashCode());
+				+ ((getHoraSaida() == null) ? 0 : getHoraSaida().hashCode());
 		result = prime * result + ((modelo == null) ? 0 : modelo.hashCode());
 		result = prime * result + ((placa == null) ? 0 : placa.hashCode());
 		result = prime * result
@@ -107,15 +98,15 @@ public class RelatorioAluguel {
 				return false;
 		} else if (!codigoVaga.equals(other.codigoVaga))
 			return false;
-		if (horaEntrada == null) {
-			if (other.horaEntrada != null)
+		if (getHoraEntrada() == null) {
+			if (other.getHoraEntrada() != null)
 				return false;
-		} else if (!horaEntrada.equals(other.horaEntrada))
+		} else if (!getHoraEntrada().equals(other.getHoraEntrada()))
 			return false;
-		if (horaSaida == null) {
-			if (other.horaSaida != null)
+		if (getHoraSaida() == null) {
+			if (other.getHoraSaida() != null)
 				return false;
-		} else if (!horaSaida.equals(other.horaSaida))
+		} else if (!getHoraSaida().equals(other.getHoraSaida()))
 			return false;
 		if (modelo == null) {
 			if (other.modelo != null)
@@ -146,6 +137,45 @@ public class RelatorioAluguel {
 				.doubleToLongBits(other.valorCobrado))
 			return false;
 		return true;
+	}
+	public String getDtEntradaFormatada() {
+		return dtEntradaFormatada;
+	}
+	public void setDtEntradaFormatada(String dtEntradaFormatada) {
+		this.dtEntradaFormatada = dtEntradaFormatada;
+	}
+	public String getDtSaidaFormatada() {
+		return dtSaidaFormatada;
+	}
+	public void setDtSaidaFormatada(String dtSaidaFormatada) {
+		this.dtSaidaFormatada = dtSaidaFormatada;
+	}
+	public LocalDateTime getHoraEntrada() {
+		return horaEntrada;
+	}
+
+	public void setHoraEntrada(LocalDateTime horaEntrada) {
+		
+		if(horaEntrada == null)
+			return;
+
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		setDtEntradaFormatada(horaEntrada.format(fmt));
+
+		this.horaEntrada = horaEntrada;
+	}
+	public LocalDateTime getHoraSaida() {
+		return horaSaida;
+	}
+	public void setHoraSaida(LocalDateTime horaSaida) {
+		
+		if (horaSaida == null)
+			return;
+		
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		setDtSaidaFormatada(horaSaida.format(fmt));
+		
+		this.horaSaida = horaSaida;
 	}
 	
 	

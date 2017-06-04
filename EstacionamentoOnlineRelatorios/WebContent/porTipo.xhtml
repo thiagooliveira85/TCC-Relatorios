@@ -14,10 +14,8 @@
 		<h:panelGrid columns="3"  style="margin-top:1%;">
 			<p:outputLabel for="tipoVaga" value="Tipo vaga:" />
 			<p:selectOneMenu id="tipoVaga" value="${dataExporterView.tipoInformado}" required="true" title="Tipo da vaga" style="width:100px;">
-				<f:selectItem itemLabel="" itemValue="" />
-				<f:selectItem itemLabel="Passeio" itemValue="PASSEIO" />
-				<f:selectItem itemLabel="Moto" itemValue="MOTO" />
-				<f:selectItem itemLabel="Caminhão" itemValue="CAMINHAO" />
+				<f:selectItem itemLabel="Escolha um tipo de vaga" itemValue="" />
+				<f:selectItems value="#{dataExporterView.listaTiposVaga}"  var="tipo" itemLabel="#{tipo.nome}" itemValue="#{tipo.nome}" />
 			</p:selectOneMenu>
 			<p:commandButton icon="ui-icon-search" title="Gerar relatório" action="${dataExporterView.buscarInformacoes}" value="Buscar" update="tbl,messages" />
 		</h:panelGrid>
@@ -75,14 +73,14 @@
 				<f:facet name="header">
 					<h:outputText value="Hora de entrada" />
 				</f:facet>
-				<h:outputText value="#{aluguel.horaEntrada}" />
+				<h:outputText value="#{aluguel.dtEntradaFormatada}" />
 			</p:column>
 
 			<p:column>
 				<f:facet name="header">
 					<h:outputText value="Hora de saída" />
 				</f:facet>
-				<h:outputText value="#{aluguel.horaSaida}" />
+				<h:outputText value="#{aluguel.dtSaidaFormatada}" />
 			</p:column>
 
 			<p:column>

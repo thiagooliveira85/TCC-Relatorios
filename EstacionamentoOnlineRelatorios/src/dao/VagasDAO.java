@@ -20,6 +20,8 @@ public class VagasDAO extends DB{
 			" and v.id_estacionamento = ?  " +
 			" and v.status = 'D' " +
 			" group by tv.nome, tv.preco ";
+	
+	private static final String LISTAR_TIPOS_VAGA = " select distinct(nome) from tipo_vaga ";
 
 	
 	/*public List<Vagas> listaVagasPorEstacionamento(int idEstacionamento) {
@@ -77,6 +79,32 @@ public class VagasDAO extends DB{
 			lista = new ArrayList<TipoVaga>();
 			while(rs.next())
 				lista.add(new TipoVaga(rs.getDouble("PRECO"), rs.getString("TIPO"), rs.getInt("QUANTIDADE")));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		
+		return lista;	
+	}
+
+
+	public List<TipoVaga> listarTipoVaga() {
+
+		Connection conn				=	null;
+		PreparedStatement pstmt		=	null;
+		ResultSet rs				=	null;
+		List<TipoVaga> lista 			=	null;
+		
+		try {
+			conn	=	getMyqslConnection();
+			pstmt	=	conn.prepareStatement(LISTAR_TIPOS_VAGA);
+			rs		=	pstmt.executeQuery();
+
+			lista = new ArrayList<TipoVaga>();
+			while(rs.next())
+				lista.add(new TipoVaga(rs.getString("NOME")));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

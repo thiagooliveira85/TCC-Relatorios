@@ -17,6 +17,11 @@ public class TipoVaga {
 		setNome(nome);
 		setQuantidadeVagas(quantidadeVagas);;
 	}
+	
+	public TipoVaga(String nome) {
+		this.nome = nome;
+	}
+
 	public int getId() {
 		return id;
 	}

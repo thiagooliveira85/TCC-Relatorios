@@ -9,7 +9,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -20,6 +19,7 @@ import org.primefaces.model.chart.PieChartModel;
 
 import bean.EstacionamentoBean;
 import bean.RelatorioAluguel;
+import bean.TipoVaga;
 import business.RelatorioBusiness;
 
 import com.lowagie.text.BadElementException;
@@ -30,6 +30,7 @@ import com.lowagie.text.PageSize;
 
 import dao.EstacionamentoDAO;
 import dao.RelatorioDAO;
+import dao.VagasDAO;
  
  
 @ManagedBean
@@ -55,6 +56,8 @@ public class DataExporterView implements Serializable {
 	
 	private List<EstacionamentoBean> estacionamentosAdmin;
 	private List<EstacionamentoBean> estacionamentos;
+	
+	private List<TipoVaga> listaTiposVaga;
          
     @PostConstruct
     public void init() {
@@ -66,6 +69,7 @@ public class DataExporterView implements Serializable {
     	int idAdministrador = 1;
     	estacionamentos			= new EstacionamentoDAO().listaTodos();
     	estacionamentosAdmin	= new EstacionamentoDAO().listaTodosAdmin(idAdministrador);
+    	listaTiposVaga			= new VagasDAO().listarTipoVaga();
     }
     
     public void buscarInformacoes(){
@@ -180,6 +184,14 @@ public class DataExporterView implements Serializable {
 
 	public void setPlaca(String placa) {
 		this.placa = placa;
+	}
+
+	public List<TipoVaga> getListaTiposVaga() {
+		return listaTiposVaga;
+	}
+
+	public void setListaTiposVaga(List<TipoVaga> listaTiposVaga) {
+		this.listaTiposVaga = listaTiposVaga;
 	}
 	
 	/*private void createPieModel1() {
