@@ -12,17 +12,17 @@
 		<div align="right">
 			<h:commandLink>
 				<p:graphicImage name="img/logo_excel.png" width="40" title="Exportar em excel" />
-				<p:dataExporter type="xls" target="tblEstac" fileName="relatoriosEstacTodos" />
+				<p:dataExporter type="xls" target="tblEstac" fileName="relatoriosEstacTodos" encoding="ISO-8859-1"/>
 			</h:commandLink>
 
 			<h:commandLink>
 				<p:graphicImage name="img/logo_pdf.png" width="40" title="Exportar em PDF" />
-				<p:dataExporter type="pdf" target="tblEstac" fileName="relatoriosEstacTodos" preProcessor="#{dataExporterView.preProcessPDF}" />
+				<p:dataExporter type="pdf" target="tblEstac" fileName="relatoriosEstacTodos" preProcessor="#{dataExporterView.preProcessPDF}" encoding="ISO-8859-1" />
 			</h:commandLink>
 
 			<h:commandLink>
 				<p:graphicImage name="img/logo_csv.png" width="40" title="Exportar em CSV" />
-				<p:dataExporter type="csv" target="tblEstac" fileName="relatoriosEstacTodos" />
+				<p:dataExporter type="csv" target="tblEstac" fileName="relatoriosEstacTodos" encoding="ISO-8859-1" />
 			</h:commandLink>
 		</div>
 
