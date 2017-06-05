@@ -19,6 +19,7 @@ import org.primefaces.model.chart.PieChartModel;
 
 import bean.EstacionamentoBean;
 import bean.RelatorioAluguel;
+import bean.RelatorioPorTipo;
 import bean.TipoVaga;
 import business.RelatorioBusiness;
 
@@ -61,7 +62,7 @@ public class DataExporterView implements Serializable {
          
     @PostConstruct
     public void init() {
-    	
+    	createPieModel1();
     	// TO CAGANDO PRA PEFORMANCE, NECESSÁRIO CONTROLE DE SESSAO E LIMPEZA
     	relatorios = new RelatorioDAO().listaRelatorioAluguel();
     	
@@ -194,16 +195,16 @@ public class DataExporterView implements Serializable {
 		this.listaTiposVaga = listaTiposVaga;
 	}
 	
-	/*private void createPieModel1() {
-    pieModel1 = new PieChartModel();
-    
-    for (RelatorioPorTipo rel : new RelatorioDAO().listaRelatorioPorTipo())
-    	pieModel1.set(rel.getTipo(), rel.getValorTotal());
-     
-    pieModel1.setTitle("Gráfico tipo de vaga por preço");
-    pieModel1.setLegendPosition("w");
-}
+	private void createPieModel1() {
+		pieModel1 = new PieChartModel();
 
+		for (RelatorioPorTipo rel : new RelatorioDAO().listaRelatorioPorTipo())
+			pieModel1.set(rel.getTipo(), rel.getValorTotal());
+
+		pieModel1.setTitle("Gráfico tipo de vaga por preço");
+		pieModel1.setLegendPosition("w");
+	}
+/*
 private void createBarModel() {
     barModel = initBarModel();
      
