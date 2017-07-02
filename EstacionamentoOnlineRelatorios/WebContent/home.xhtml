@@ -7,8 +7,30 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 	
 	<ui:define name="corpo">
+		
 		<div align="center">
 			<img style="filter:alpha(opacity=10);opacity:.10;" src="resources/img/logotipo.png" width="30%" height="30%" />
 		</div>
+		
+		<p:dialog visible="true" header="" widgetVar="dlg2"	showEffect="explode" modal="true" height="50%" width="50%" closable="false" resizable="false">
+
+			<p:dataTable id="eventsDT" var="estacionamento" value="#{dataExporterView.estacionamentosAdmin}" selectionMode="single" 
+				selection="#{dataExporterView.selectedEstacionamento}"	rowKey="#{estacionamento.id}"  emptyMessage="Não foram encontrados estacionamentos cadastrados" 
+			 	style="width:100%;">
+				<f:facet name="header">Informe um estacionamento para consulta</f:facet>
+				
+				<p:ajax event="rowSelect" listener="#{dataExporterView.onRowSelect}" oncomplete="PF('dlg2').hide()" update="titulo" />
+				
+				<p:column headerText="Nome">
+					<h:outputText value="#{estacionamento.nomeFantasia}" />
+				</p:column>
+				<p:column headerText="Endereço">
+					<h:outputText value="#{estacionamento.enderecoBean}" />
+				</p:column>
+				
+			</p:dataTable>
+
+		</p:dialog>
+		
 	</ui:define>
 </ui:composition>

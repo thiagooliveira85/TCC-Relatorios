@@ -12,10 +12,17 @@ import java.util.List;
 
 import bean.RelatorioAluguel;
 import bean.RelatorioPorTipo;
-import bean.Tipo;
 import db.DB;
 
 public class RelatorioDAO extends DB {
+	
+	private static final String ORDER_BY = " ORDER BY HORA_ENTRADA DESC ";
+	
+	private int idEstacionamento;
+	
+	public RelatorioDAO(int idEstacionamento){
+		this.idEstacionamento = idEstacionamento;
+	}
 	
 
 	public List<RelatorioAluguel> listaRelatorioAluguel() {
@@ -28,7 +35,8 @@ public class RelatorioDAO extends DB {
 		try {
 
 			conn = getMyqslConnection();
-			pstmt = conn.prepareStatement("select * from historico_aluguel");
+			pstmt = conn.prepareStatement("select * from historico_aluguel where id_estacionamento = ? " + ORDER_BY);
+			pstmt.setInt(1, idEstacionamento);
 			rs = pstmt.executeQuery();
 			relatorios = new ArrayList<RelatorioAluguel>();
 
@@ -54,7 +62,8 @@ public class RelatorioDAO extends DB {
 		try {
 
 			conn = getMyqslConnection();
-			pstmt = conn.prepareStatement("select tipo_vaga, sum(valor_cobrado) as total from historico_aluguel group by tipo_vaga");
+			pstmt = conn.prepareStatement("select tipo_vaga, sum(valor_cobrado) as total from historico_aluguel where id_estacionamento = ? group by tipo_vaga" + ORDER_BY);
+			pstmt.setInt(1, idEstacionamento);
 			rs = pstmt.executeQuery();
 			relatorios = new ArrayList<RelatorioPorTipo>();
 
@@ -119,8 +128,9 @@ public class RelatorioDAO extends DB {
 		try {
 
 			conn = getMyqslConnection();
-			pstmt = conn.prepareStatement("select * from historico_aluguel where upper(tipo_vaga) = ?");
-			pstmt.setString(1, tipoInformado.toUpperCase());
+			pstmt = conn.prepareStatement("select * from historico_aluguel where id_estacionamento = ? and upper(tipo_vaga) = ?" + ORDER_BY);
+			pstmt.setInt(1, idEstacionamento);
+			pstmt.setString(2, tipoInformado.toUpperCase());
 			rs = pstmt.executeQuery();
 			lista = new ArrayList<RelatorioAluguel>();
 
@@ -146,10 +156,11 @@ public class RelatorioDAO extends DB {
 		try {
 
 			conn = getMyqslConnection();
-			pstmt = conn.prepareStatement("select * from historico_aluguel where hora_entrada between (?) and (?) and upper(tipo_vaga) = ?");
+			pstmt = conn.prepareStatement("select * from historico_aluguel where hora_entrada between (?) and (?) and upper(tipo_vaga) = ? and id_estacionamento = ?" + ORDER_BY);
 			pstmt.setDate(1, new java.sql.Date(dateIni.getTime()));
 			pstmt.setDate(2, new java.sql.Date(dateFim.getTime()));
 			pstmt.setString(3, tipoInformado.toUpperCase());
+			pstmt.setInt(4, idEstacionamento);
 			rs = pstmt.executeQuery();
 			lista = new ArrayList<RelatorioAluguel>();
 
@@ -175,9 +186,10 @@ public class RelatorioDAO extends DB {
 		try {
 
 			conn = getMyqslConnection();
-			pstmt = conn.prepareStatement("select * from historico_aluguel where hora_entrada between (?) and (?) ");
+			pstmt = conn.prepareStatement("select * from historico_aluguel where hora_entrada between (?) and (?) and id_estacionamento = ?" + ORDER_BY);
 			pstmt.setDate(1, new java.sql.Date(dateIni.getTime()));
 			pstmt.setDate(2, new java.sql.Date(dateFim.getTime()));
+			pstmt.setInt(3, idEstacionamento);
 			rs = pstmt.executeQuery();
 			lista = new ArrayList<RelatorioAluguel>();
 
@@ -203,7 +215,8 @@ public class RelatorioDAO extends DB {
 		try {
 
 			conn = getMyqslConnection();
-			pstmt = conn.prepareStatement("select * from historico_aluguel where upper(placa) like '%" + placa.toUpperCase() + "%'");
+			pstmt = conn.prepareStatement("select * from historico_aluguel where id_estacionamento = ? and upper(placa) like '%" + placa.toUpperCase() + "%'" + ORDER_BY);
+			pstmt.setInt(1, idEstacionamento);
 			rs = pstmt.executeQuery();
 			relatorios = new ArrayList<RelatorioAluguel>();
 

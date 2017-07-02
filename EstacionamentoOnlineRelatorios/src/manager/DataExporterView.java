@@ -9,10 +9,14 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpSession;
 
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.PieChartModel;
@@ -21,6 +25,7 @@ import bean.EstacionamentoBean;
 import bean.RelatorioAluguel;
 import bean.RelatorioPorTipo;
 import bean.TipoVaga;
+import bean.UsuarioBean;
 import business.RelatorioBusiness;
 
 import com.lowagie.text.BadElementException;
@@ -35,7 +40,7 @@ import dao.VagasDAO;
  
  
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class DataExporterView implements Serializable {
      
     /**
@@ -59,18 +64,29 @@ public class DataExporterView implements Serializable {
 	private List<EstacionamentoBean> estacionamentos;
 	
 	private List<TipoVaga> listaTiposVaga;
+	
+	private EstacionamentoBean selectedEstacionamento;
+	
+	private int idEstacionamento;
          
     @PostConstruct
     public void init() {
-    	createPieModel1();
-    	// TO CAGANDO PRA PEFORMANCE, NECESSÁRIO CONTROLE DE SESSAO E LIMPEZA
-    	relatorios = new RelatorioDAO().listaRelatorioAluguel();
+    	buscaEstacionamentosDoAdministrador();
+    }
+
+    public void onRowSelect(SelectEvent event) {
     	
-    	// BUSCAR O ID DO ADM LOGADO
-    	int idAdministrador = 1;
+    	// ESTACIONAMENTO ESCOLHIDO PELO ADMINISTRADOR
+    	selectedEstacionamento = (EstacionamentoBean) event.getObject();
+    	idEstacionamento = selectedEstacionamento.getId();
+    	
+    	createPieModel1();
+    	
     	estacionamentos			= new EstacionamentoDAO().listaTodos();
-    	estacionamentosAdmin	= new EstacionamentoDAO().listaTodosAdmin(idAdministrador);
     	listaTiposVaga			= new VagasDAO().listarTipoVaga();
+    	
+    	relatorios 				= new RelatorioDAO(idEstacionamento).listaRelatorioAluguel();
+    	
     }
     
     public void buscarInformacoes(){
@@ -84,7 +100,7 @@ public class DataExporterView implements Serializable {
     	if (dateIni == null && dateFim == null && tipoInformado == null)
     		return;
     	
-    	relatorios = RelatorioBusiness.getInstance().buscarInformacoesPor(dateIni, dateFim, tipoInformado);
+    	relatorios = RelatorioBusiness.getInstance().buscarInformacoesPor(dateIni, dateFim, tipoInformado, idEstacionamento);
     }
     
     public void buscarInformacoesPorPlaca(){
@@ -95,7 +111,7 @@ public class DataExporterView implements Serializable {
     		return;
     	}
     	
-    	relatorios = new RelatorioDAO().buscarInformacoesPorPlaca(placa);
+    	relatorios = new RelatorioDAO(idEstacionamento).buscarInformacoesPorPlaca(placa);
     }
     
     public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
@@ -105,6 +121,10 @@ public class DataExporterView implements Serializable {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "img" + File.separator + "logotipo.png";
         pdf.add(Image.getInstance(logo));
+    }
+    
+    public void buttonAction(ActionEvent actionEvent) {
+        System.out.println("testee");
     }
 
 	public List<RelatorioAluguel> getRelatorios() {
@@ -195,14 +215,33 @@ public class DataExporterView implements Serializable {
 		this.listaTiposVaga = listaTiposVaga;
 	}
 	
+	public EstacionamentoBean getSelectedEstacionamento() {
+		return selectedEstacionamento;
+	}
+
+	public void setSelectedEstacionamento(EstacionamentoBean selectedEstacionamento) {
+		this.selectedEstacionamento = selectedEstacionamento;
+	}
+	
 	private void createPieModel1() {
 		pieModel1 = new PieChartModel();
 
-		for (RelatorioPorTipo rel : new RelatorioDAO().listaRelatorioPorTipo())
+		for (RelatorioPorTipo rel : new RelatorioDAO(idEstacionamento).listaRelatorioPorTipo())
 			pieModel1.set(rel.getTipo(), rel.getValorTotal());
 
 		pieModel1.setTitle("Gráfico tipo de vaga por preço");
 		pieModel1.setLegendPosition("w");
+	}
+	
+	private void buscaEstacionamentosDoAdministrador() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+    	UsuarioBean usuario = (UsuarioBean)session.getAttribute("usuario");
+    	
+    	if (usuario != null){
+    		int idAdministrador = usuario.getId();
+        	// VERIFICA OS ESTACIONAMENTOS DO ADMINISTRADOR
+        	estacionamentosAdmin	= new EstacionamentoDAO().listaTodosAdmin(idAdministrador);
+    	}
 	}
 /*
 private void createBarModel() {

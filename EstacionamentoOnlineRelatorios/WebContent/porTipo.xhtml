@@ -39,7 +39,7 @@
 
 		<p:dataTable id="tbl" var="aluguel" 
 			value="#{dataExporterView.relatorios}" paginatorTemplate=" {FirstPageLink} {PageLinks} {LastPageLink}" 
-			paginator="true" rows="5" paginatorPosition="bottom" emptyMessage="Nenhum aluguel cadastrado." style="margin-bottom:20px; margin-top:1%;">
+			paginator="true" rows="10" paginatorPosition="bottom" emptyMessage="Nenhum aluguel cadastrado." style="margin-bottom:20px; margin-top:1%;">
 
 			<p:column>
 				<f:facet name="header">
@@ -103,7 +103,7 @@
 		
 		<p:commandButton value="Gráfico por preço" type="button" onclick="PF('dlg3').show();" />
 		
-		<p:dialog  header="" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" modal="true" height="50%">
+		<p:dialog  header="" widgetVar="dlg3" showEffect="explode" modal="true" height="50%">
 			<h:panelGrid>
 				<p:chart type="pie" model="#{dataExporterView.pieModel1}" style="width:400px;height:50%" />
 			</h:panelGrid>

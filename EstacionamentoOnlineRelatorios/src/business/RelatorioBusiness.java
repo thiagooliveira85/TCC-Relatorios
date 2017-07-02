@@ -18,15 +18,15 @@ public class RelatorioBusiness {
 		return instance;
 	}
 
-	public List<RelatorioAluguel> buscarInformacoesPor(Date dateIni, Date dateFim, String tipoInformado) {
+	public List<RelatorioAluguel> buscarInformacoesPor(Date dateIni, Date dateFim, String tipoInformado, int idEstacionamento) {
 		
 		if (dateIni != null && dateFim != null && tipoInformado != null && !tipoInformado.equals(""))
-			return new RelatorioDAO().buscarInformacoesPorFiltro(dateIni, dateFim, tipoInformado);
+			return new RelatorioDAO(idEstacionamento).buscarInformacoesPorFiltro(dateIni, dateFim, tipoInformado);
 		
 		else if (tipoInformado == null || tipoInformado.equals(""))
-			return new RelatorioDAO().buscarInformacoesPorPeriodo(dateIni, dateFim);
+			return new RelatorioDAO(idEstacionamento).buscarInformacoesPorPeriodo(dateIni, dateFim);
 		
-		return new RelatorioDAO().buscarInformacoesPorTipo(tipoInformado);
+		return new RelatorioDAO(idEstacionamento).buscarInformacoesPorTipo(tipoInformado);
 	}
 
 

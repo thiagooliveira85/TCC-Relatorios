@@ -30,44 +30,44 @@
 			value="#{dataExporterView.estacionamentos}" paginatorTemplate=" {FirstPageLink} {PageLinks} {LastPageLink}" 
 			paginator="true" rows="10" paginatorPosition="bottom" emptyMessage="Nenhum estacionamento cadastrado." style="margin-bottom:20px; margin-top:1%;">
 
-			<p:column width="13%">
+			<p:column width="20%">
 				<f:facet name="header">
 					<h:outputText value="Nome Fantasia" />
 				</f:facet>
 				<h:outputText value="#{estacionamento.nomeFantasia}" />
 			</p:column>
 			
-			<p:column width="17%">
+			<!-- <p:column width="17%">
 				<f:facet name="header">
 					<h:outputText value="Administrador" />
 				</f:facet>
 				<h:outputText value="#{estacionamento.administrador}" />
-			</p:column>
+			</p:column> 
 
 			<p:column width="10%" style="text-align:center;">
 				<f:facet name="header">
 					<h:outputText value="CNPJ" />
 				</f:facet>
 				<h:outputText value="#{estacionamento.cnpj}" />
-			</p:column>
+			</p:column>-->
 
-			<p:column width="40%">
+			<p:column width="70%">
 				<f:facet name="header">
 					<h:outputText value="Endereço" />
 				</f:facet>
 				<h:outputText value="#{estacionamento.enderecoBean}" />
 			</p:column>
 			
-			<p:column width="10%" style="text-align:center;">
+			<!-- <p:column width="10%" style="text-align:center;">
 				<f:facet name="header">
 					<h:outputText value="Situação" />
 				</f:facet>
 				<h:outputText value="#{estacionamento.statusBean.nome}"/>
-			</p:column>
+			</p:column> -->
 
 			<p:column width="10%" style="text-align:center;">
 				<f:facet name="header">
-					<h:outputText value="Avaliação" />
+					<h:outputText value="Ranking" />
 				</f:facet>
 				<h:outputText value="#{estacionamento.avaliacao}"/>
 			</p:column>

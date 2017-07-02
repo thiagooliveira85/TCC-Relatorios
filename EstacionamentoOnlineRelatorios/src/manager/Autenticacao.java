@@ -66,6 +66,15 @@ public class Autenticacao implements Serializable {
 		
 			res.sendRedirect("/EstacionamentoOnlineRelatorios");
 			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void entrada(){
+		try {
+			HttpServletResponse res = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			res.sendRedirect("/EstacionamentoOnlineRelatorios");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

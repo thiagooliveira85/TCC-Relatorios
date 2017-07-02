@@ -17,7 +17,7 @@
 		</div>
 	</header>
 
-	<h:form>
+	<h:form id="form1" prependId="false">
 		<p:menubar style="margin-bottom:1%;">
 			<p:submenu label="Aluguel" icon="ui-icon-document">
 				<p:menuitem value="Por período" url="/porPeriodo.jsf"
@@ -34,20 +34,19 @@
 					icon="ui-icon-arrow-1-e" />
 			</p:submenu>
 			<f:facet name="options">
-				<p:commandButton value="Sair" icon="ui-icon-extlink"
-					action="#{autenticacao.logout}" ajax="false"/>
+				<p:commandButton value="Sair" icon="ui-icon-extlink" action="#{autenticacao.logout}" ajax="false"/>
 			</f:facet>
 		</p:menubar>
+		
+		<h1 style="filter:alpha(opacity=10);opacity:.10; text-align: center;">
+    		<a href="http://localhost:9091/EstacionamentoOnlineRelatorios/home.jsf"><p:outputLabel id="titulo" value="#{dataExporterView.selectedEstacionamento.nomeFantasia}" /></a>
+		</h1>
+		
 	</h:form>
 
 	<div id="conteudo">
 		<ui:insert name="corpo" />
 	</div>
-
-	<!-- <footer>
-		<p>Relatórios Estacionamento OnLine</p>
-		<p><small>Desenvolvido por Thiago Oliveira</small></p>
-	</footer> -->
 
 </h:body>
 </html>

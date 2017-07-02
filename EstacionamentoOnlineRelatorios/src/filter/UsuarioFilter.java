@@ -29,10 +29,16 @@ public class UsuarioFilter implements Filter{
 		
 		UsuarioBean usuario = (UsuarioBean)session.getAttribute("usuario");
 		
-		if (usuario == null && !req.getRequestURI().endsWith("login.jsf"))
+		String url = req.getRequestURI();
+		if (usuario == null && !url.endsWith("login.jsf") && byPassArquivosEstaticos(url))
 			res.sendRedirect("login.jsf");
 		else
 			chain.doFilter(request, response);
+	}
+	
+	private boolean byPassArquivosEstaticos(String url) {
+		return !url.endsWith(".css") && !url.endsWith(".js") && !url.endsWith(".jpg") && !url.endsWith(".png")
+				&& !url.endsWith(".gif") && !url.contains("javax.faces.resource");
 	}
 
 	@Override
