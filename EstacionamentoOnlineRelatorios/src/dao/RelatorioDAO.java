@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import bean.Cliente;
+import bean.Faturamento;
 import bean.RelatorioAluguel;
 import bean.RelatorioPorTipo;
 import db.DB;
@@ -263,5 +265,119 @@ public class RelatorioDAO extends DB {
 			r.setHoraSaida(dataSaida != null ? dataSaida : null);
 		}
 	}
+
+
+	/*public List<Cliente> buscaQTDClientesPorData() {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<Cliente> clientes = null;
+		
+		String sql = " select distinct(placa) from HISTORICO_ALUGUEL where id_estacionamento = ? and placa in ('KVU7464','LLK4566')";
+		
+		String sql2 = " select placa, concat(month(hora_entrada),'/', year(hora_entrada)) as mes_ano, count(placa) as qtd from HISTORICO_ALUGUEL " + 
+					" where id_estacionamento = ?" +
+					" and placa = ? and placa in ('KVU7464','LLK4566')" +
+					" group by placa, month(hora_entrada), year(hora_entrada) " +
+					" order by count(placa) desc ";
+		
+		try {
+
+			conn = getMyqslConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idEstacionamento);
+			rs = pstmt.executeQuery();
+			
+			clientes = new ArrayList<Cliente>();
+			while (rs.next()){
+				
+				String placa = rs.getString("placa");
+				
+				List<MesAno> lstMesAno = new ArrayList<>();
+				pstmt = conn.prepareStatement(sql2);
+				pstmt.setInt(1, idEstacionamento);
+				pstmt.setString(2, placa);
+				
+				ResultSet rs2 = pstmt.executeQuery();
+				while (rs2.next())
+					lstMesAno.add(new MesAno(rs2.getString("mes_ano"), rs2.getInt("qtd")));
+				
+				rs2.close();
+				rs2 = null;
+				
+				clientes.add(new Cliente(placa, lstMesAno));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		
+		return clientes;
+	}*/
+	
+	public List<Cliente> buscaQTDClientesPorAlugueis() {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<Cliente> clientes = null;
+		
+		String sql = " select placa, count(placa) as qtd from HISTORICO_ALUGUEL where id_estacionamento = ? " +
+				" group by placa order by count(placa) desc ";
+		
+		try {
+
+			conn = getMyqslConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idEstacionamento);
+			rs = pstmt.executeQuery();
+			
+			clientes = new ArrayList<Cliente>();
+			while (rs.next())
+				clientes.add(new Cliente(rs.getString("placa"), rs.getInt("qtd")));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		
+		return clientes;
+	}
+	
+	public List<Faturamento> buscaFaturamentoMensal() {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<Faturamento> lista = null;
+		
+		String sql = " select concat(month(hora_entrada),'/', year(hora_entrada)) as mes_ano, sum(valor_cobrado) as valor from HISTORICO_ALUGUEL where id_estacionamento = ? " + 
+			" group by month(hora_entrada), year(hora_entrada) order by count(placa) desc ";
+		
+		try {
+
+			conn = getMyqslConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idEstacionamento);
+			rs = pstmt.executeQuery();
+			
+			lista = new ArrayList<Faturamento>();
+			while (rs.next())
+				lista.add(new Faturamento(rs.getString("mes_ano"), rs.getInt("valor")));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		
+		return lista;
+	}
+	
+	
 
 }

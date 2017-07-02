@@ -94,6 +94,15 @@
 				<h:outputText value="#{aluguel.tipoPagamento}" />
 			</p:column>
 		</p:dataTable>	
+		
+		<p:commandButton value="Gráfico por clientes mais assíduos" type="button" onclick="PF('dlg6').show();" />
+		
+		<p:dialog  header="" widgetVar="dlg6" showEffect="explode" modal="true" height="50%">
+			<p:panelGrid>
+				<p:chart type="bar" model="#{dataExporterView.clientesAssiduos}" style="height:350px; width:800px;"/>
+			</p:panelGrid>
+		</p:dialog>
+		
 	</h:form>
 	</ui:define>
 </ui:composition>

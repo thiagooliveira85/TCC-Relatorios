@@ -73,6 +73,15 @@
 			</p:column>
 
 		</p:dataTable>
+		
+		<p:commandButton value="Gráfico por ranking" type="button" onclick="PF('dlg5').show();" />
+		
+		<p:dialog  header="" widgetVar="dlg5" showEffect="explode" modal="true" height="50%">
+			<p:panelGrid>
+				<p:chart type="bar" model="#{dataExporterView.barModel}" style="height:350px; width:800px;"/>
+			</p:panelGrid>
+		</p:dialog>
+		
 	</h:form>
 	</ui:define>
 </ui:composition>

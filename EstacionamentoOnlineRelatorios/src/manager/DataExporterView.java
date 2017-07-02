@@ -3,6 +3,7 @@ package manager;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.Normalizer;
 import java.util.Date;
 import java.util.List;
 
@@ -10,18 +11,22 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.PieChartModel;
 
+import bean.Cliente;
 import bean.EstacionamentoBean;
+import bean.Faturamento;
 import bean.RelatorioAluguel;
 import bean.RelatorioPorTipo;
 import bean.TipoVaga;
@@ -68,6 +73,9 @@ public class DataExporterView implements Serializable {
 	private EstacionamentoBean selectedEstacionamento;
 	
 	private int idEstacionamento;
+	
+	private BarChartModel clientesAssiduos;
+	private PieChartModel faturamento;
          
     @PostConstruct
     public void init() {
@@ -80,13 +88,15 @@ public class DataExporterView implements Serializable {
     	selectedEstacionamento = (EstacionamentoBean) event.getObject();
     	idEstacionamento = selectedEstacionamento.getId();
     	
-    	createPieModel1();
-    	
     	estacionamentos			= new EstacionamentoDAO().listaTodos();
     	listaTiposVaga			= new VagasDAO().listarTipoVaga();
     	
     	relatorios 				= new RelatorioDAO(idEstacionamento).listaRelatorioAluguel();
     	
+    	createPieModel1();
+    	createFaturamentoPorMes();
+    	createBarRanking();
+    	createBarClientes();
     }
     
     public void buscarInformacoes(){
@@ -225,12 +235,22 @@ public class DataExporterView implements Serializable {
 	
 	private void createPieModel1() {
 		pieModel1 = new PieChartModel();
-
+		
 		for (RelatorioPorTipo rel : new RelatorioDAO(idEstacionamento).listaRelatorioPorTipo())
 			pieModel1.set(rel.getTipo(), rel.getValorTotal());
 
 		pieModel1.setTitle("Gráfico tipo de vaga por preço");
 		pieModel1.setLegendPosition("w");
+	}
+	
+	private void createFaturamentoPorMes() {
+		faturamento = new PieChartModel();
+
+		for (Faturamento fat : new RelatorioDAO(idEstacionamento).buscaFaturamentoMensal())
+			faturamento.set(fat.getMesAno(), fat.getValor());
+
+		faturamento.setTitle("Gráfico faturamento mensal");
+		faturamento.setLegendPosition("w");
 	}
 	
 	private void buscaEstacionamentosDoAdministrador() {
@@ -243,21 +263,100 @@ public class DataExporterView implements Serializable {
         	estacionamentosAdmin	= new EstacionamentoDAO().listaTodosAdmin(idAdministrador);
     	}
 	}
+	
+	private void createBarRanking() {
+        barModel = initBarRanking();
+        barModel.setAnimate(true);
+        barModel.setTitle("Ranking");
+        barModel.setLegendPosition("ne");
+         
+        Axis xAxis = barModel.getAxis(AxisType.X);
+        xAxis.setLabel("Estacionamentos");
+         
+        Axis yAxis = barModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Avaliações");
+        yAxis.setMin(0);
+        yAxis.setMax(50);
+    }
+	
+	private BarChartModel initBarRanking() {
+
+		BarChartModel model = new BarChartModel();
+		for (EstacionamentoBean e : estacionamentos) {
+			ChartSeries cs = new ChartSeries();
+			cs.setLabel(removeAcentos(e.getNomeFantasia()));
+			cs.set("", e.getAvaliacao());
+			model.addSeries(cs);
+		}
+
+		return model;
+	}
+	
+	private void createBarClientes() {
+		clientesAssiduos = initBarClientes();
+		clientesAssiduos.setAnimate(true);
+		clientesAssiduos.setTitle("Clientes");
+		clientesAssiduos.setLegendPosition("ne");
+         
+        Axis xAxis = clientesAssiduos.getAxis(AxisType.X);
+        xAxis.setLabel("Placas");
+         
+        Axis yAxis = clientesAssiduos.getAxis(AxisType.Y);
+        yAxis.setLabel("Alugueis");
+        yAxis.setMin(0);
+        yAxis.setMax(10);
+    }
+	
+	private BarChartModel initBarClientes() {
+
+		BarChartModel model = new BarChartModel();
+		for (Cliente c : new RelatorioDAO(idEstacionamento).buscaQTDClientesPorAlugueis()) {
+			ChartSeries cs = new ChartSeries();
+			cs.setLabel(removeAcentos(c.getPlaca()));
+			cs.set("", c.getQtdAlugueis());
+			model.addSeries(cs);
+		}
+		return model;
+	}
+	
+	private String removeAcentos(String str) {
+		 
+		  str = Normalizer.normalize(str, Normalizer.Form.NFD);
+		  str = str.replaceAll("[^\\p{ASCII}]", "");
+		  return str;
+	}
+
+	public BarChartModel getClientesAssiduos() {
+		return clientesAssiduos;
+	}
+
+	public void setClientesAssiduos(BarChartModel clientesAssiduos) {
+		this.clientesAssiduos = clientesAssiduos;
+	}
+
+	public PieChartModel getFaturamento() {
+		return faturamento;
+	}
+
+	public void setFaturamento(PieChartModel faturamento) {
+		this.faturamento = faturamento;
+	}
+	
 /*
 private void createBarModel() {
-    barModel = initBarModel();
-     
-    barModel.setTitle("Gráfico tipo de vaga por tempo");
-    barModel.setLegendPosition("ne");
-     
-    Axis xAxis = barModel.getAxis(AxisType.X);
-    xAxis.setLabel("Tipo de vagas");
-     
-    Axis yAxis = barModel.getAxis(AxisType.Y);
-    yAxis.setLabel("Preços");
-    yAxis.setMin(0);
-    yAxis.setMax(50);
-}
+	    barModel = initBarModel();
+	     
+	    barModel.setTitle("Gráfico tipo de vaga por tempo");
+	    barModel.setLegendPosition("ne");
+	     
+	    Axis xAxis = barModel.getAxis(AxisType.X);
+	    xAxis.setLabel("Tipo de vagas");
+	     
+	    Axis yAxis = barModel.getAxis(AxisType.Y);
+	    yAxis.setLabel("Preços");
+	    yAxis.setMin(0);
+	    yAxis.setMax(50);
+	}
 
 private BarChartModel initBarModel() {
     BarChartModel model = new BarChartModel();
