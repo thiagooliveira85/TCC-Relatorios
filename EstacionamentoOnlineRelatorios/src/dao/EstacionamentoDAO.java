@@ -13,12 +13,11 @@ import bean.Coordenadas;
 import bean.EnderecoBean;
 import bean.EstacionamentoBean;
 import bean.StatusBean;
-import bean.TipoLogradouroBean;
 import db.DB;
 
 public class EstacionamentoDAO extends DB {
 	
-	private static final String LISTAR_TODOS_ESTACIONAMENTOS = " SELECT e.id, s.id as id_status, s.nome as status, e.nome_fantasia, tl.id as id_tipo_logr, tl.nome AS tipo_logr, "
+	private static final String LISTAR_TODOS_ESTACIONAMENTOS = " SELECT e.id, s.id as id_status, s.nome as status, e.nome_fantasia, "
 			+ " end.nome_logradouro, "
 			+ " end.numero, "
 			+ " b.id as id_bairro, "
@@ -33,14 +32,12 @@ public class EstacionamentoDAO extends DB {
 			+ " FROM "
 			+ " estacionamento e, "
 			+ " endereco end, "
-			+ " tipo_logradouro tl, "
 			+ " bairro b, "
 			+ " cidade c, "
 			+ " status s, "
 			+ " usuario u "
 			+ " WHERE "
 			+ " e.id_endereco = end.id "
-			+ " AND tl.id = end.id_tipo_logradouro "
 			+ " AND b.id = end.id_bairro "
 			+ " AND c.id = end.id_cidade "
 			+ " AND s.id = e.id_status "
@@ -175,7 +172,6 @@ public class EstacionamentoDAO extends DB {
 		statusBean.setNome(rs.getString("STATUS"));
 		estacionamentoBean.setStatusBean(statusBean);
 		EnderecoBean end = new EnderecoBean();
-		end.setTipoLogradouroBean(new TipoLogradouroBean(rs.getInt("ID_TIPO_LOGR"), rs.getString("TIPO_LOGR")));
 		end.setNomeLogradouro(rs.getString("NOME_LOGRADOURO"));
 		end.setNumero(rs.getInt("NUMERO"));
 		end.setBairroBean(new BairroBean(rs.getInt("ID_BAIRRO"), rs.getString("BAIRRO")));
